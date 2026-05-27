@@ -1,0 +1,15 @@
+[Unit]
+Description=Word Clock (Rust, WS2812 on GPIO 18 PWM0)
+After=network-online.target time-sync.target
+Wants=network-online.target time-sync.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/wordclock-rust-pwm
+Restart=on-failure
+RestartSec=3
+# rpi_ws281x needs /dev/mem -> must run as root.
+User=root
+
+[Install]
+WantedBy=multi-user.target

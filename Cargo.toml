@@ -1,0 +1,22 @@
+[package]
+name = "wordclock-rust-pwm"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+rs_ws281x = { git = "https://github.com/rpi-ws281x/rpi-ws281x-rust.git" }
+chrono = { version = "0.4", features = ["clock"] }
+rand = { version = "0.8", default-features = false, features = [
+    "std",
+    "std_rng",
+] }
+
+# Force `bindgen` (used by rs_ws281x's build.rs) to load libclang via dlopen at
+# runtime instead of linking it dynamically. Without this, the build script
+# binary references @rpath/libclang.dylib and dyld can't find it on macOS
+# unless DYLD_FALLBACK_LIBRARY_PATH is set in the parent shell (cargo's
+# `[env]` table can't override DYLD_*). Cargo's feature unification ensures
+# rs_ws281x's bindgen instance picks up the `runtime` feature too.
+[build-dependencies]
+bindgen = { version = "0.69", default-features = false, features = ["runtime"] }
+clang-sys = { version = "1", features = ["runtime"] }

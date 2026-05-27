@@ -1,0 +1,5 @@
+/target
+
+# macOS metadata
+.DS_Store
+._*

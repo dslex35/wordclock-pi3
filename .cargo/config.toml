@@ -1,0 +1,16 @@
+# Cross-compile defaults. cargo-zigbuild handles the actual linker/CC wiring,
+# so we don't need linker= overrides here.
+
+[alias]
+# Shorter command: `cargo pi-build --release`
+pi-build = "zigbuild --target armv7-unknown-linux-musleabihf"
+
+# `cargo zigbuild --target armv7-unknown-linux-musleabihf --release` still works
+# as requested - the alias is just a convenience.
+
+# rs_ws281x's build.rs uses `bindgen`, which needs libclang to be available at
+# build time. We force `bindgen`/`clang-sys` into runtime/dlopen mode via
+# Cargo.toml's [build-dependencies], so we only need to tell it WHERE libclang
+# lives. Override LIBCLANG_PATH in the shell if your LLVM is elsewhere.
+[env]
+LIBCLANG_PATH = { value = "/opt/homebrew/opt/llvm/lib", force = false }
